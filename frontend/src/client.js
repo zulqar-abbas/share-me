@@ -6,6 +6,7 @@ export const client = sanityClient({
   dataset: "production",
   apiVersion: "2022-11-07",
   useCdn: true,
+  ignoreBrowserTokenWarning: true,
   token: process.env.REACT_APP_SHAREME_SANITY_TOKEN,
 });
 
