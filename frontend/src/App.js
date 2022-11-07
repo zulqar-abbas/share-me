@@ -1,4 +1,4 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Route, Router, Routes, useNavigate } from "react-router-dom";
 import logo from "./logo.svg";
 import "./App.css";
 import Login from "./components/Login";
