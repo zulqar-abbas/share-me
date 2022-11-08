@@ -28,7 +28,7 @@ const Navbar = ({ searchTerm, setSearchTerm, user }) => {
         </Link>
 
         <Link
-          to={`create-bin`}
+          to={`create-pin`}
           className="bg-black text-white w-12 h-12 md:w-14 md:h-12 flex justify-center items-center rounded-lg"
         >
           <IoMdAdd />
