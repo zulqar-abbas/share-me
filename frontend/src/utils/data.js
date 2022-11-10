@@ -114,8 +114,8 @@ export const pinDetailQuery = (pinId) => {
       },
     },
     comments[]{
-      comment,
       _key,
+      comment,
       postedBy->{
         _id,
         userName,

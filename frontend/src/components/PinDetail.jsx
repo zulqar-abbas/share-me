@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdDownloadForOffline } from "react-icons/md";
+import { BsBookmarkPlus, BsBookmarkPlusFill } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 
@@ -14,6 +15,7 @@ const PinDetail = ({ user }) => {
   const [pinDetail, setPinDetail] = useState();
   const [comment, setComment] = useState("");
   const [addingComment, setAddingComment] = useState(false);
+  const [savingPost, setSavingPost] = useState(false);
 
   const fetchPinDetails = () => {
     const query = pinDetailQuery(pinId);
@@ -36,6 +38,38 @@ const PinDetail = ({ user }) => {
     fetchPinDetails();
   }, [pinId]);
 
+  let alreadySaved = pinDetail?.save?.filter(
+    (item) => item?.postedBy?._id === user?.googleId
+  );
+
+  alreadySaved = alreadySaved?.length > 0 ? alreadySaved : [];
+
+  const savePin = () => {
+    let id = pinDetail._id;
+    if (alreadySaved?.length === 0) {
+      setSavingPost(true);
+
+      client
+        .patch(id)
+        .setIfMissing({ save: [] })
+        .insert("after", "save[-1]", [
+          {
+            _key: uuidv4(),
+            userId: user?.googleId,
+            postedBy: {
+              _type: "postedBy",
+              _ref: user?.googleId,
+            },
+          },
+        ])
+        .commit()
+        .then(() => {
+          fetchPinDetails();
+          setSavingPost(false);
+        });
+    }
+  };
+
   const addComment = () => {
     if (comment) {
       setAddingComment(true);
@@ -52,6 +86,7 @@ const PinDetail = ({ user }) => {
         ])
         .commit()
         .then(() => {
+          console.log("Fetching details after");
           fetchPinDetails();
           setComment("");
           setAddingComment(false);
@@ -80,12 +115,20 @@ const PinDetail = ({ user }) => {
           <div className="w-full p-5 flex-1 xl:min-w-620">
             <div className="flex items-center justify-between">
               <div className="flex gap-2 items-center">
-                <input
-                  type="text"
-                  className="w-full"
-                  value={pinDetail.image.asset.url}
-                  disabled
-                />
+                {alreadySaved?.length === 0 ? (
+                  <button
+                    onClick={savePin}
+                    className="bg-secondaryColor p-2 text-xl rounded-full flex items-center justify-center text-dark opacity-75 hover:opacity-100"
+                  >
+                    <BsBookmarkPlus />
+                    {pinDetail.save?.length || 0}
+                  </button>
+                ) : (
+                  <button className="bg-secondaryColor p-2 text-xl rounded-full flex items-center justify-center text-dark opacity-75 hover:opacity-100">
+                    <BsBookmarkPlusFill />
+                    {pinDetail.save?.length || 0}
+                  </button>
+                )}
                 <a
                   href={`${pinDetail.image.asset.url}?dl=`}
                   download
@@ -95,7 +138,7 @@ const PinDetail = ({ user }) => {
                 </a>
               </div>
               <a href={pinDetail.destination} target="_blank" rel="noreferrer">
-                {/* {pinDetail.destination?.slice(8)} */ `Go to Destination`}
+                {`Go to Destination`}
               </a>
             </div>
             <div>
