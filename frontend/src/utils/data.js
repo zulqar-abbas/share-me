@@ -20,6 +20,11 @@ export const categories = [
       "https://i.pinimg.com/750x/66/b1/29/66b1296d36598122e6a4c5452b5a7149.jpg",
   },
   {
+    name: "coding",
+    image:
+      "https://i.pinimg.com/750x/66/b1/29/66b1296d36598122e6a4c5452b5a7149.jpg",
+  },
+  {
     name: "photo",
     image:
       "https://i.pinimg.com/236x/72/8c/b4/728cb43f48ca762a75da645c121e5c57.jpg",

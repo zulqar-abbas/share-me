@@ -30,7 +30,11 @@ const Pins = ({ user }) => {
           <Route
             path="/search"
             element={
-              <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+              <Search
+                searchTerm={searchTerm}
+                setSearchTerm={setSearchTerm}
+                user={user && user}
+              />
             }
           />
         </Routes>
